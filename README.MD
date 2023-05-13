@@ -1,6 +1,6 @@
 # RL Mario Pytorch
 
-![Mario Playing All 32 Levels](https://github.com/dgriff777/rl_a3c_pytorch/blob/master/demo/demo.gif) ![Mario Playing Whole Game Straight Through](https://github.com/dgriff777/rl_a3c_pytorch/blob/master/demo/demo2.gif) 
+![Mario Playing All 32 Levels](https://github.com/dgriff777/SuperMarioRL/blob/master/demo/demo.gif) ![Mario Playing Whole Game Straight Through](https://github.com/dgriff777/SuperMarioRL/blob/master/demo/demo2.gif) 
 
 # Train One Model to Play All 32 Levels!!
 In honor of the recent Super Mario Bros movie I decided to create a repo to train an agent to play the original Super Mario Bros. What seperates this from other implementations successful implementations is that you can a train a model to win every level rather quickly, often under an hour with just one or two GPUs with a 20-core cpu. You can also train one model to play all the levels succesfully opposed to other implementations I have seen which just train one specific model to play one specific stage successful. We use implementation of A3C that utilizes GPU for speed increase in training. Which we can call **A3G**. A3G as opposed to other versions that try to utilize GPU with A3C algorithm, with A3G each agent has its own network maintained on GPU but shared model is on CPU and agent models are quickly converted to CPU to update shared model which allows updates to be frequent and fast by utilizing Hogwild Training and make updates to shared model asynchronously and without locks. This method greatly increase training speed.
