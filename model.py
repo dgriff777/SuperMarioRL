@@ -18,7 +18,6 @@ class ResBlock(nn.Module):
         self.conv4 = nn.Conv2d(planes, planes, kernel_size=3, stride=1, padding=1)
         self.conv5 = nn.Conv2d(planes, planes, kernel_size=3, stride=1, padding=1)
 
-
     def forward(self, x):
         x = F.max_pool2d(self.conv1(x), 3, 2, 1)
         res_input = x
@@ -50,10 +49,12 @@ class MarioNET(nn.Module):
         self.critic_linear = nn.Linear(core_output_size, 1)
         self.apply(weights_init)
         self.actor_linear.weight.data = norm_col_init(
-            self.actor_linear.weight.data, 0.01)
+            self.actor_linear.weight.data, 0.01
+        )
         self.actor_linear.bias.data.fill_(0)
         self.critic_linear.weight.data = norm_col_init(
-            self.critic_linear.weight.data, 1.0)
+            self.critic_linear.weight.data, 1.0
+        )
         self.critic_linear.bias.data.fill_(0)
         relu = nn.init.calculate_gain("relu")
         self.fc.weight.data.mul_(relu)
@@ -69,11 +70,10 @@ class MarioNET(nn.Module):
                     p.data.fill_(0)
                     # Set forget-gate bias to 1
                     n = p.size(0)
-                    p.data[(n // 4):(n // 2)].fill_(1)
+                    p.data[(n // 4) : (n // 2)].fill_(1)
                 elif "bias_hh" in name:
                     p.data.fill_(0)
         self.train()
-
 
     def forward(self, inputs, hx, cx):
         x = inputs

@@ -1,5 +1,6 @@
 from __future__ import division
 import os
+
 os.environ["OMP_NUM_THREADS"] = "1"
 from setproctitle import setproctitle as ptitle
 import torch
@@ -35,10 +36,12 @@ def test(args, shared_model):
     reward_total_sum = 0
     player = Agent(None, env, args, None)
     player.gpu_id = gpu_id
-    player.model = MarioNET(player.env.observation_space.shape[0],
-                           player.env.action_space, args)
+    player.model = MarioNET(
+        player.env.observation_space.shape[0], player.env.action_space, args
+    )
     if args.tensorboard_logger:
         from torch.utils.tensorboard import SummaryWriter
+
         dummy_input = (
             torch.zeros(1, player.env.observation_space.shape[0], 80, 80),
             torch.zeros(1, args.hidden_size),
@@ -96,9 +99,7 @@ def test(args, shared_model):
                         )
                 else:
                     state_to_save = player.model.state_dict()
-                    torch.save(
-                        state_to_save, f"{args.save_model_dir}{args.env}.dat"
-                    )
+                    torch.save(state_to_save, f"{args.save_model_dir}{args.env}.dat")
                 reward_sum = 0
                 player.eps_len = 0
                 if args.train_stages:

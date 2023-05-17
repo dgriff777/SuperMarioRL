@@ -1,5 +1,6 @@
 from __future__ import division
 import os
+
 os.environ["OMP_NUM_THREADS"] = "1"
 import torch
 import torch.nn.functional as F
@@ -34,7 +35,6 @@ class Agent(object):
         self.gpu_id = -1
         self.hidden_size = args.hidden_size
 
-
     def action_train(self):
         value, logit, self.hx, self.cx = self.model(self.state, self.hx, self.cx)
         prob = F.softmax(logit, dim=1)
@@ -55,7 +55,6 @@ class Agent(object):
         self.log_probs.append(log_prob)
         self.rewards.append(self.reward)
         return self
-
 
     def action_test(self):
         with torch.no_grad():
@@ -78,7 +77,6 @@ class Agent(object):
             self.state = torch.from_numpy(state)
         self.eps_len += 1
         return self
-
 
     def clear_actions(self):
         self.values = []

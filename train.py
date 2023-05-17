@@ -1,5 +1,6 @@
 from __future__ import division
 import os
+
 os.environ["OMP_NUM_THREADS"] = "1"
 from setproctitle import setproctitle as ptitle
 import torch
@@ -34,12 +35,14 @@ def train(rank, args, shared_model, optimizer):
             optimizer = optim.RMSprop(shared_model.parameters(), lr=args.lr)
         if args.optimizer == "Adam":
             optimizer = optim.Adam(
-                shared_model.parameters(), lr=args.lr, amsgrad=args.amsgrad)
+                shared_model.parameters(), lr=args.lr, amsgrad=args.amsgrad
+            )
     env.seed(args.seed + rank)
     player = Agent(None, env, args, None)
     player.gpu_id = gpu_id
-    player.model = MarioNET(player.env.observation_space.shape[0],
-                           player.env.action_space, args)
+    player.model = MarioNET(
+        player.env.observation_space.shape[0], player.env.action_space, args
+    )
     player.state = player.env.reset()
     if gpu_id >= 0:
         with torch.cuda.device(gpu_id):
@@ -48,7 +51,7 @@ def train(rank, args, shared_model, optimizer):
     else:
         player.state = torch.from_numpy(player.state)
     player.model.train()
-    flag=True
+    flag = True
     player.env.set_training_on()
     if args.load_rms_stats:
         player.env.load("test_env_data")
@@ -107,12 +110,17 @@ def train(rank, args, shared_model, optimizer):
                 R = args.gamma * R + player.rewards[i]
                 advantage = R - player.values[i]
                 value_loss = value_loss + 0.5 * advantage.pow(2)
-                delta_t = player.rewards[i] + args.gamma * \
-                    player.values[i + 1].data - player.values[i].data
+                delta_t = (
+                    player.rewards[i]
+                    + args.gamma * player.values[i + 1].data
+                    - player.values[i].data
+                )
                 gae = gae * args.gamma * args.tau + delta_t
-                policy_loss = policy_loss - \
-                    player.log_probs[i] * \
-                    gae - args.entropy_coef * player.entropies[i]
+                policy_loss = (
+                    policy_loss
+                    - player.log_probs[i] * gae
+                    - args.entropy_coef * player.entropies[i]
+                )
             player.model.zero_grad()
             (policy_loss + args.value_coef * value_loss).backward()
             ensure_shared_grads(player.model, shared_model, gpu=gpu_id >= 0)
