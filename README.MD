@@ -1,11 +1,11 @@
 # RL Mario Pytorch
 
-<h1 align="center"› Mario Playing All 32 Levels</h1>
+<p align="center"> Mario Playing All 32 Levels</p>
 <p align="center">
     <img src="https://github.com/dgriff777/SuperMarioRL/blob/main/demo/demo.gif" alt="Mario Playing all 32 Levels">
 </p>
 
-<h1 align="center"› Mario Playing The Whole Game Straight Through</h1>
+<p align="center"> Mario Playing The Whole Game Straight Through</p>
 <p align="center">
     <img src="https://github.com/dgriff777/SuperMarioRL/blob/main/demo/demo2.gif" alt="Mario Playing Whole Game Straight Through">
 </p>
